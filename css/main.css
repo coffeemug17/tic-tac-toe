@@ -36,7 +36,7 @@ body {
 
 #board > div:hover {
     border: 1vmin solid lightcoral;
-    transition: 50ms;
+    transition: 75ms;
 }
 
 button {
@@ -50,6 +50,6 @@ button {
 
 button:hover {
     color:white;
-    background-color: green;
-    transition: 50ms;
+    background-color:  darkslategrey;
+    transition: 75ms;
 }

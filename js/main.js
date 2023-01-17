@@ -21,6 +21,7 @@ const resetButton = document.querySelector("button");
 
 
 /*----- event listeners -----*/
+document.getElementById("board").addEventListener('click',playTurn);
 resetButton.addEventListener('click',init);
 
 /*----- functions -----*/
@@ -34,11 +35,70 @@ function init() {
     render();
 }
 
+function playTurn(evt) {
+    const cellIdx = evt.target.id;
+
+    //Guard for already inputted values
+    if (board[cellIdx] !== 0) return;
+
+    board[cellIdx] = turn;
+    turn *= -1;
+    winner = getWinner(cellIdx);
+    render();
+}
+
+function getWinner(cellIdx) {
+    return checkVerticalWin(cellIdx) ||
+    checkHorizontalWin(cellIdx) ||
+    checkdiagonalWin(cellIdx) ||
+    checkForTie();
+}
+
+function checkVerticalWin(cellIdx) {
+    for( let i = 0; i < board.length; i++) {
+        if (board[i] + board[i + 3] + board[i + 6] === 3) {
+            return 1;
+        } else if (board[i] + board[i + 3] + board[i + 6] === -3) {
+            return -1;
+        }
+    }
+}
+
+function checkHorizontalWin(cellIdx) {
+    for( let i = 0; i <= 6; i += 3) {
+        if (board[i] + board[i + 1] + board[i + 2] === 3) {
+            return 1;
+        } else if (board[i] + board[i + 1] + board[i + 2] === -3) {
+            return -1;
+        }
+    }
+}
+
+function checkdiagonalWin(cellIdx) {
+    if (board[0] + board[4] + board[8] === 3) {
+        return 1;
+    } else if (board[0] + board[4] + board[8] === -3) {
+        return -1;
+    } else if (board[2] + board[4] + board[6] === 3) {
+        return 1;
+    } else if (board[2] + board[4] + board[6] === -3) {
+        return -1;
+    }
+}
+
+function checkForTie() {
+    if (board.includes(0)) {
+        return;
+    } else {
+        return "T";
+    }
+}
+
 //render() helps in visualizing elements of the DOM
 function render() {
     renderBoard();
     renderMessage();
-    renderControls();//Hides or shows the UI elements 
+    renderControls();//Hides or shows the UI elements which in our case is the reset  game button
 }
 
 function renderBoard() {
@@ -47,6 +107,10 @@ function renderBoard() {
         const cellEl = document.getElementById(cellId);
         // cellEl.style.backgroundColor = COLORS[cellVal];
         cellEl.innerHTML = PLAYERS[cellVal];
+        cellEl.style.textAlign= "center";
+        cellEl.style.fontSize = "60px";
+        cellEl.style.color = `${COLORS[cellVal]}`;
+        cellEl.style.fontWeight = "bold";
     });
 
 }
